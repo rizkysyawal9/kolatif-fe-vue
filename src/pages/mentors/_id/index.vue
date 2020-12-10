@@ -113,7 +113,10 @@
               <h3 class="mb-4">Other Top Rated Mentors</h3>
 
               <div v-for="teacher in mentors(mentor.id)" :key="teacher.id">
-                <a :href="`/mentors/${teacher.id}`" class="links">
+                <router-link
+                  :to="`/dashboard/mentors/${teacher.id}`"
+                  class="links"
+                >
                   <h3 style="color: black">
                     {{ teacher.name }}
                   </h3>
@@ -121,7 +124,7 @@
                     {{ teacher.workExperience[0].jobTitle }} at
                     {{ teacher.workExperience[0].company }}
                   </p>
-                </a>
+                </router-link>
                 <v-divider class="mb-3"></v-divider>
               </div>
             </v-card-text>

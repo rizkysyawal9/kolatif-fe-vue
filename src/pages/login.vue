@@ -2,13 +2,13 @@
   <v-row align="center" justify="center" class="grey lighten-4">
     <v-col cols="12" sm="8" md="4">
       <v-container class="pa-12 logo">
-        <nuxt-link to="/">
+        <router-link to="/">
           <v-img
             :src="require('../assets/images/logo.png')"
             alt="atourin"
             contain
           />
-        </nuxt-link>
+        </router-link>
       </v-container>
       <v-card class="pa-8">
         <div>
@@ -55,7 +55,7 @@
       </v-card>
       <p class="mt-6 text-center">
         Don't have an account yet?
-        <nuxt-link to="/register/mentee">Sign Up</nuxt-link>
+        <router-link to="/register/mentee">Sign Up</router-link>
       </p>
     </v-col>
     <div></div>

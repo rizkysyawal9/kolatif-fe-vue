@@ -20,6 +20,21 @@ const routes = [
             name: 'landing',
             component: () => import('../pages/index'),
           },
+          {
+            path: 'register',
+            name: 'register',
+            component: () => import('../pages/register/index'),
+          },
+          {
+            path: 'register/mentor',
+            name: 'register mentor',
+            component: () => import('../pages/register/mentor'),
+          },
+          {
+            path: 'register/mentee',
+            name: 'register mentee',
+            component: () => import('../pages/register/mentee'),
+          },
         ],
       },
       {
@@ -85,6 +100,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
+  mode: 'history',
   routes,
 })
 

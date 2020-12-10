@@ -3,20 +3,20 @@
     <v-row align="center" justify="center">
       <v-col cols="12" sm="8" md="4">
         <v-container class="pa-8 logo">
-          <nuxt-link to="/">
+          <router-link to="/">
             <v-img
-              :src="require('~/assets/images/logo.png')"
+              :src="require('../../assets/images/logo.png')"
               alt="atourin"
               contain
             />
-          </nuxt-link>
+          </router-link>
         </v-container>
         <v-card class="pl-8 pb-8 pr-8 pt-6">
           <div style="text-align: center" class="pb-2">
             <h2>Hello Future Mentor!</h2>
             <p class="mt-2">
               Want to sign up as a
-              <nuxt-link to="/register/mentee">mentee?</nuxt-link>
+              <router-link to="/register/mentee">mentee?</router-link>
             </p>
           </div>
           <v-form v-model="valid">
@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import validation from '~/utils/validation'
+import validation from '../../utils/validation'
 export default {
   layout: 'normal',
   data() {

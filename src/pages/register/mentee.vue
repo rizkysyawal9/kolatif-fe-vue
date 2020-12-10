@@ -3,20 +3,20 @@
     <v-row align="center" justify="center" class="grey lighten-4">
       <v-col cols="12" sm="8" md="4">
         <v-container class="pa-8 logo">
-          <nuxt-link to="/">
+          <router-link to="/">
             <v-img
-              :src="require('~/assets/images/logo.png')"
+              :src="require('../../assets/images/logo.png')"
               alt="atourin"
               contain
             />
-          </nuxt-link>
+          </router-link>
         </v-container>
         <v-card class="pl-8 pb-8 pr-8 pt-6">
           <div style="text-align: center" class="pb-2">
             <h2>Hello Future Mentee!</h2>
             <p class="mt-2">
               Want to sign up as a
-              <nuxt-link to="/register/mentor">mentor?</nuxt-link>
+              <router-link to="/register/mentor">mentor?</router-link>
             </p>
           </div>
           <v-form v-model="valid">
@@ -80,10 +80,7 @@
 </template>
 
 <script>
-import firebase from 'firebase/app'
-import 'firebase/auth'
-// import '@firebase/auth'
-import validation from '~/utils/validation'
+import validation from '../../utils/validation'
 export default {
   layout: 'normal',
   data() {
@@ -104,22 +101,6 @@ export default {
   methods: {
     loginUser() {
       // TODO LOGIN FUNCTION
-    },
-    register() {
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(
-          this.registerInfo.email,
-          this.registerInfo.password
-        )
-        .then((user) => {
-          // eslint-disable-next-line no-console
-          console.log(user)
-        })
-        .catch((error) => {
-          // eslint-disable-next-line no-console
-          console.log(error)
-        })
     },
   },
   head() {

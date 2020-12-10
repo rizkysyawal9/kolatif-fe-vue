@@ -5,7 +5,7 @@
         <v-card class="pl-8 pb-8 pr-8 pt-6">
           <v-img
             class="mx-12 mb-4"
-            :src="require('~/assets/images/logo.png')"
+            :src="require('../../assets/images/logo.png')"
             alt="atourin"
             contain
           />
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import validation from '~/utils/validation'
+import validation from '../../utils/validation'
 export default {
   layout: 'normal',
   data() {

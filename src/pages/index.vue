@@ -45,8 +45,10 @@
               navigate challenges and progress.
             </div>
             <div class="mt-4">
-              <v-btn color="primary" to="/mentors" class="mr-3">Find your mentor!</v-btn>
-              <v-btn class="primary--text" to="/mentors"
+              <v-btn color="primary" to="/dashboard/mentors" class="mr-3"
+                >Find your mentor!</v-btn
+              >
+              <v-btn class="primary--text" to="/register/mentor"
                 >Become a Mentor!</v-btn
               >
             </div>
