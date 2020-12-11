@@ -48,7 +48,10 @@
               <v-btn color="primary" to="/dashboard/mentors" class="mr-3"
                 >Find your mentor!</v-btn
               >
-              <v-btn class="primary--text" to="/register/mentor"
+              <v-btn
+                class="primary--text"
+                to="/register/mentor"
+                v-if="!loggedIn"
                 >Become a Mentor!</v-btn
               >
             </div>
@@ -81,6 +84,8 @@
 </template>
 
 <script>
+import { firebase } from '@firebase/app'
+import 'firebase/auth'
 import Events from '../components/index/Events'
 import Featured from '../components/index/Featured'
 import Newsletter from '../components/index/Newsletter'
@@ -90,8 +95,15 @@ export default {
     Featured,
     Events,
   },
+  created() {
+    firebase.auth().onAuthStateChanged(user => {
+      this.loggedIn = !!user
+      console.log(user)
+    })
+  },
   data() {
     return {
+      loggedIn: false,
       items: [
         {
           src: require('../assets/images/header-1.webp'),

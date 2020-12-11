@@ -10,7 +10,7 @@
           />
         </v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-dialog width="350">
+        <!-- <v-dialog width="350">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               color="primary"
@@ -44,15 +44,51 @@
               </v-btn>
             </v-card-text>
           </v-card>
-        </v-dialog>
+        </v-dialog> -->
+        <v-btn v-if="loggedIn" color="primary" outlined @click="goToDashboard">
+          Dashboard
+        </v-btn>
+        <v-btn
+          v-else
+          color="primary"
+          class="text-none"
+          dark
+          outlined
+          @click="login"
+        >
+          Login
+        </v-btn>
       </v-app-bar>
     </nav>
   </div>
 </template>
 
 <script>
+import { firebase } from '@firebase/app'
+import '@firebase/auth'
 export default {
   name: 'Navbar',
+  created() {
+    firebase.auth().onAuthStateChanged(user => {
+      this.loggedIn = !!user
+      console.log(user)
+      this.email = user.email
+    })
+  },
+  data() {
+    return {
+      loggedIn: false,
+      email: '',
+    }
+  },
+  methods: {
+    login() {
+      this.$router.push({ name: 'login' })
+    },
+    goToDashboard() {
+      this.$router.push({ name: 'mentors' })
+    },
+  },
 }
 </script>
 

@@ -21,6 +21,22 @@
           </div>
           <v-form v-model="valid">
             <v-text-field
+              v-model="registerInfo.email"
+              prepend-inner-icon="mdi-account-outline"
+              label="E-mail"
+              :rules="[required('email')]"
+              outlined
+              dense
+            />
+            <v-text-field
+              v-model="registerInfo.password"
+              prepend-inner-icon="mdi-account-outline"
+              label="Password"
+              :rules="[required('password')]"
+              outlined
+              dense
+            />
+            <v-text-field
               v-model="registerInfo.name"
               prepend-inner-icon="mdi-account-outline"
               label="Name"
@@ -28,7 +44,6 @@
               outlined
               dense
             />
-
             <v-combobox
               v-model="registerInfo.experitse"
               :items="expertise"
@@ -87,6 +102,8 @@
 
 <script>
 import validation from '../../utils/validation'
+import { firebase } from '@firebase/app'
+import '@firebase/auth'
 export default {
   layout: 'normal',
   data() {
@@ -118,9 +135,20 @@ export default {
     }
   },
   methods: {
-    registerUser() {
+    async registerUser() {
       // eslint-disable-next-line no-console
-      console.log(this.registerInfo)
+      // console.log(this.registerInfo)
+      try {
+        const user = firebase
+          .auth()
+          .createUserWithEmailAndPassword(
+            this.registerInfo.email,
+            this.registerInfo.password
+          )
+          this.$router.replace({name: 'mentors'})
+      } catch (e) {
+        console.log(e.message)
+      } 
     },
   },
   head() {
