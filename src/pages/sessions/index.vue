@@ -49,11 +49,14 @@ export default {
     // this.$store.dispatch('sessions/getSessionData')
     this.sessions = this.allSessions
   },
+  mounted() {
+    console.log(this.$store.state.user.user)
+  },
   // eslint-disable-next-line vue/order-in-components
   computed: {
     ...mapState('sessions', {
       // sessions: (state) => state.sessions,
-      myMentors: (state) => state.myMentors,
+      myMentors: state => state.myMentors,
     }),
     ...mapGetters({
       allSessions: 'sessions/allSessions',
@@ -69,7 +72,7 @@ export default {
       console.log(`my Sessions: ${this.sessions}`)
       // eslint-disable-next-line no-console
       console.log(`my Mentors: ${this.myMentors}`)
-      const targetMentor = this.myMentors.find((mentor) => {
+      const targetMentor = this.myMentors.find(mentor => {
         return mentor.id === id
       })
       // eslint-disable-next-line no-console

@@ -26,7 +26,7 @@
     </v-img>
     <v-container>
       <v-row>
-        <v-col v-for="event in events" :key="event.id" cols="12" lg="3">
+        <v-col v-for="(event, index) in events" :key="index" cols="12" lg="3">
           <Event :event-data="event" />
         </v-col>
       </v-row>

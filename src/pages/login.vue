@@ -48,7 +48,7 @@
               >Sign In</v-btn
             >
           </v-form>
-          <div>{{ error }}</div>
+          <div style="color: red; margin-top: 10px">{{ error }}</div>
         </v-card>
         <p class="mt-6 text-center">
           Don't have an account yet?
@@ -80,6 +80,14 @@ export default {
       isLoading: false,
     }
   },
+  watch: {
+    loginInfo: {
+      handler(newValue) {
+        this.error = ''
+      },
+      deep: true,
+    },
+  },
   methods: {
     async loginUser() {
       // TODO LOGIN FUNCTION
@@ -96,11 +104,11 @@ export default {
         this.$router.replace({ name: 'mentors' })
       } catch (e) {
         console.log(e.message)
+        this.isLoading = false
         this.error = e.message
       }
     },
   },
-  watch() {},
 }
 </script>
 

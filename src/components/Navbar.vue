@@ -65,15 +65,16 @@
 
 <script>
 import { firebase } from '@firebase/app'
+import { mapState } from 'vuex'
 import '@firebase/auth'
 export default {
   name: 'Navbar',
-  created() {
-    firebase.auth().onAuthStateChanged(user => {
+  async mounted() {
+    await firebase.auth().onAuthStateChanged(user => {
       this.loggedIn = !!user
-      console.log(user)
       this.email = user.email
     })
+    // console.log(user)
   },
   data() {
     return {
@@ -81,12 +82,19 @@ export default {
       email: '',
     }
   },
+  computed: {
+    ...mapState('user', {
+      user: state => state.user,
+    }),
+  },
   methods: {
     login() {
       this.$router.push({ name: 'login' })
     },
     goToDashboard() {
-      this.$router.push({ name: 'mentors' })
+      console.log(this.user)
+      if (this.user.role == 'mentor') this.$router.push({ name: 'sessions' })
+      else this.$router.push({ name: 'mentors' })
     },
   },
 }

@@ -43,6 +43,7 @@ export default {
   },
   created() {
     // TODO: dispatch api call to get mentors
+    this.$store.dispatch('mentors/loadMentors')
   },
   methods: {
     search() {

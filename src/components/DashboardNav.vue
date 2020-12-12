@@ -11,7 +11,12 @@
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn text class="text-none mr-2" color="primary" to="/dashboard/mentors"
+      <v-btn
+        v-if="user.role != 'mentor'"
+        text
+        class="text-none mr-2"
+        color="primary"
+        to="/dashboard/mentors"
         >Mentors</v-btn
       >
       <v-btn
@@ -42,7 +47,18 @@
 </template>
 
 <script>
-export default {}
+import { mapState } from 'vuex'
+
+export default {
+  computed: {
+    ...mapState('user', {
+      user: state => state.user,
+    }),
+  },
+  mounted() {
+    console.log(this.user)
+  },
+}
 </script>
 
 <style></style>

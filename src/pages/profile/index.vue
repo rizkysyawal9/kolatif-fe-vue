@@ -45,6 +45,19 @@
         <v-col cols="12">
           <v-card class="pa-2">
             <v-card-text>
+              <div v-if="user.role == 'mentor'">
+                <h2>Expertise</h2>
+                <v-chip-group class="mt-3">
+                  <div
+                    v-for="(expertise, index) in user.expertise"
+                    :key="index"
+                  >
+                    <v-chip class="mr-2" color="primary ">{{
+                      expertise
+                    }}</v-chip>
+                  </div>
+                </v-chip-group>
+              </div>
               <h2 class="mt-3">My Experience</h2>
               <div
                 v-for="experience in user.workExperience"
@@ -108,11 +121,6 @@ import 'firebase/auth'
 import { mapState } from 'vuex'
 export default {
   layout: 'dashboard',
-  computed: {
-    ...mapState('user', {
-      user: state => state.user,
-    }),
-  },
   head() {
     return {
       title: 'Profile',
@@ -121,7 +129,13 @@ export default {
   data() {
     return {
       isLoading: false,
+      // user: {},
     }
+  },
+  computed: {
+    ...mapState('user', {
+      user: state => state.user,
+    }),
   },
   methods: {
     async signOut() {
