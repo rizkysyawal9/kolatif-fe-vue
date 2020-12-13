@@ -75,30 +75,34 @@
       <v-dialog v-model="show_modal_gmeet" max-width="500px">
         <v-card>
           <v-card-title> Accept Session with {{ profile.name }}? </v-card-title>
-          <v-card-text class="pb-0 mb-0">
-            <v-text-field
-              label="Google Meet Link"
-              single-line
-              outlined
-              dense
-              class="mt-3"
-              v-model="gmeetLink"
-            ></v-text-field>
-          </v-card-text>
-          <v-card-actions class="pt-0">
-            <v-btn
-              color="primary"
-              text
-              @click="sendGmeetLink"
-              class="ml-auto"
-              :loading="isLoading"
-            >
-              Send
-            </v-btn>
-            <v-btn color="primary" text @click="show_modal_gmeet = false">
-              Close
-            </v-btn>
-          </v-card-actions>
+          <v-form v-model="valid">
+            <v-card-text class="pb-0 mb-0">
+              <v-text-field
+                label="Google Meet Link"
+                single-line
+                outlined
+                dense
+                class="mt-3"
+                v-model="gmeetLink"
+                :rules="[required('google meet link')]"
+              ></v-text-field>
+            </v-card-text>
+            <v-card-actions class="pt-0">
+              <v-btn
+                color="primary"
+                text
+                @click="sendGmeetLink"
+                class="ml-auto"
+                :loading="isLoading"
+                :disabled="!valid"
+              >
+                Send
+              </v-btn>
+              <v-btn color="primary" text @click="show_modal_gmeet = false">
+                Close
+              </v-btn>
+            </v-card-actions>
+          </v-form>
         </v-card>
       </v-dialog>
       <v-dialog v-model="show_modal_message" max-width="500px">
@@ -113,6 +117,7 @@
               outlined
               class="mt-3"
               v-model="message"
+              :rules="[required('Decline Message')]"
             ></v-textarea>
           </v-card-text>
           <v-card-actions class="pt-0">
@@ -159,6 +164,7 @@ import { firebase } from '@firebase/app'
 import '@firebase/auth'
 import '@firebase/firestore'
 import { mapGetters } from 'vuex'
+import validation from '@/utils/validation.js'
 export default {
   props: {
     session: {
@@ -181,6 +187,9 @@ export default {
       gmeetLink: '',
       message: '',
       isLoading: false,
+      ...validation,
+      valid: false,
+      valid2: false,
     }
   },
   mounted() {
