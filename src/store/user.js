@@ -31,7 +31,9 @@ const user = {
       return Promise.resolve()
     },
   },
-  getters: {},
+  getters: {
+    user: state => state.user,
+  },
 }
 
 // export const state = () => ({

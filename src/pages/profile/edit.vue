@@ -4,7 +4,7 @@
       <v-row justify="center" align="center">
         <v-col cols="12" lg="2">
           <v-img
-            :src="require('../../assets/images/joseph.jpeg')"
+            :src="require('@/assets/images/sandbox.jpg')"
             aspect-ratio="1"
           ></v-img>
         </v-col>

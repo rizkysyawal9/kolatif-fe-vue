@@ -8,7 +8,7 @@
           <v-row justify="center" align="center">
             <v-col cols="12" lg="2">
               <v-img
-                :src="require('@/assets/images/joseph.jpeg')"
+                :src="require('@/assets/images/sandbox.jpg')"
                 aspect-ratio="1"
                 style="border-radius: 50%; max-width: 150px"
                 class="ml-4"
@@ -112,14 +112,14 @@
               </v-card-text>
             </v-card>
           </v-col>
-          <v-col cols="12" lg="3" v-if="mentors(this.$route.params.id)">
+          <v-col cols="12" lg="3" v-if="mentors($route.params.id)">
             <v-card class="pa-4" outlined>
               <v-card-text>
                 <h3 class="mb-4">Other Top Rated Mentors</h3>
 
                 <div
-                  v-for="teacher in mentors(this.$route.params.id)"
-                  :key="teacher.id"
+                  v-for="(teacher, index) in mentors($route.params.id)"
+                  :key="index"
                 >
                   <router-link
                     :to="`/dashboard/mentors/${teacher.id}`"
@@ -163,44 +163,15 @@ export default {
       title: this.mentor.name,
     }
   },
-  data() {
-    return {
-      mentor: {},
-    }
-  },
-  async mounted() {
-    // console.log(this.allMentors)
-    await firebase
-      .firestore()
-      .collection('profiles')
-      .doc(this.$route.params.id)
-      .get()
-      .then(doc => {
-        this.mentor = doc.data()
-        console.log(this.mentor)
-      })
-  },
+
   computed: {
     ...mapGetters({
       allMentors: 'mentors/allMentors',
       mentors: 'mentors/someMentors',
     }),
-    // mentors() {
-    //   // eslint-disable-next-line eqeqeq
-    //   let data = []
-    //   let filtered = this.allMentors.filter(v => v.id != this.$route.params.id)
-    //   console.log(filtered)
-    //   for (let i = 0; i < 3; i++) {
-    //     data.push(filtered[i])
-    //   }
-    //   return filtered
-    // },
-    // mentors(){
-    //   let data = []
-    //   for(let i=0; i<3; i++){
-    //     data.push(this.allMentors)
-    //   }
-    // }
+    mentor() {
+      return this.allMentors.find(v => v.id == this.$route.params.id)
+    },
   },
 }
 </script>

@@ -166,8 +166,8 @@ export default {
             id: this.uid,
             name: this.registerInfo.name,
             role: 'mentor',
-            rating: null,
-            reviews: null,
+            rating: 0,
+            reviews: 0,
             workExperience: [
               {
                 jobTitle: this.registerInfo.jobTitle,

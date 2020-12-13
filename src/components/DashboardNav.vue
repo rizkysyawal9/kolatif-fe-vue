@@ -24,6 +24,7 @@
         color="primary"
         class="text-none mr-2"
         to="/dashboard/sessions"
+        @click="loadMentor"
         >Sessions</v-btn
       >
       <v-btn text color="primary" class="text-none mr-2" to="/dashboard/events"
@@ -57,6 +58,14 @@ export default {
   },
   mounted() {
     console.log(this.user)
+  },
+  methods: {
+    async loadMentor() {
+      if (this.user.role == 'mentee')
+        await this.$store.dispatch('sesssion/loadMenteeSessions', this.user.id)
+      else
+        await this.$store.dispatch('sessions/loadMentorSessions', this.user.id)
+    },
   },
 }
 </script>

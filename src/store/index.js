@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import user from './user'
 import mentors from './mentors'
 import sessions from './sessions'
+import mentees from './mentees'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -10,5 +11,6 @@ export default new Vuex.Store({
     user,
     mentors,
     sessions,
+    mentees,
   },
 })
