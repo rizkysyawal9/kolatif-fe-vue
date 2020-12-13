@@ -39,11 +39,15 @@ export default {
   computed: {
     ...mapGetters({
       mentors: 'mentors/allMentors',
+      user: 'user/user',
     }),
   },
-  created() {
-    // TODO: dispatch api call to get mentors
+  watch: {
+    user: function(val) {
+      if (this.user.role == 'mentor') this.$router.push({ name: 'profile' })
+    },
   },
+
   methods: {
     search() {
       // eslint-disable-next-line no-console

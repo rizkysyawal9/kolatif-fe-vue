@@ -10,7 +10,7 @@
           />
         </v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-dialog width="350">
+        <!-- <v-dialog width="350">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               color="primary"
@@ -44,15 +44,59 @@
               </v-btn>
             </v-card-text>
           </v-card>
-        </v-dialog>
+        </v-dialog> -->
+        <v-btn v-if="loggedIn" color="primary" outlined @click="goToDashboard">
+          Dashboard
+        </v-btn>
+        <v-btn
+          v-else
+          color="primary"
+          class="text-none"
+          dark
+          outlined
+          @click="login"
+        >
+          Login
+        </v-btn>
       </v-app-bar>
     </nav>
   </div>
 </template>
 
 <script>
+import { firebase } from '@firebase/app'
+import { mapState } from 'vuex'
+import '@firebase/auth'
 export default {
   name: 'Navbar',
+  async mounted() {
+    await firebase.auth().onAuthStateChanged(user => {
+      this.loggedIn = !!user
+      this.email = user.email
+    })
+    // console.log(user)
+  },
+  data() {
+    return {
+      loggedIn: false,
+      email: '',
+    }
+  },
+  computed: {
+    ...mapState('user', {
+      user: state => state.user,
+    }),
+  },
+  methods: {
+    login() {
+      this.$router.push({ name: 'login' })
+    },
+    goToDashboard() {
+      console.log(this.user)
+      if (this.user.role == 'mentor') this.$router.push({ name: 'sessions' })
+      else this.$router.push({ name: 'mentors' })
+    },
+  },
 }
 </script>
 

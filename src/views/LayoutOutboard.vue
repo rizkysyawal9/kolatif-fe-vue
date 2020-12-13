@@ -1,6 +1,11 @@
 <template>
   <v-app>
-    <div v-if="this.$route.name.includes('register')"></div>
+    <div
+      v-if="
+        this.$route.name.includes('register') |
+          this.$route.name.includes('login')
+      "
+    ></div>
     <navbar v-else />
     <v-main>
       <router-view />

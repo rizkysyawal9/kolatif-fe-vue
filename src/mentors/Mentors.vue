@@ -8,7 +8,7 @@
       ></v-progress-linear>
     </template>
 
-    <v-img height="250" :src="require('~/assets/images/joseph.jpeg')"></v-img>
+    <v-img height="250" :src="require('~/assets/images/')"></v-img>
 
     <v-card-title class="pb-2">{{ mentorData.name }}</v-card-title>
 

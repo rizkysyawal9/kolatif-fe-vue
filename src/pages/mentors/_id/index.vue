@@ -5,7 +5,7 @@
         <v-row justify="center" align="center">
           <v-col cols="12" lg="2">
             <v-img
-              :src="require('../../../assets/images/joseph.jpeg')"
+              :src="require('@/assets/images/sandbox.jpg')"
               aspect-ratio="1"
               style="border-radius: 50%; max-width: 150px"
               class="ml-4"
@@ -56,8 +56,8 @@
               <v-divider class="mt-3 mb-5"></v-divider>
               <h2 class="mt-3">My Working Experience</h2>
               <div
-                v-for="experience in mentor.workExperience"
-                :key="experience.id"
+                v-for="(experience, index) in mentor.workExperience"
+                :key="index"
                 class="mt-3"
               >
                 <v-row>
@@ -112,7 +112,7 @@
             <v-card-text>
               <h3 class="mb-4">Other Top Rated Mentors</h3>
 
-              <div v-for="teacher in mentors(mentor.id)" :key="teacher.id">
+              <!-- <div v-for="teacher in mentors(mentor.id)" :key="teacher.id">
                 <router-link
                   :to="`/dashboard/mentors/${teacher.id}`"
                   class="links"
@@ -126,7 +126,7 @@
                   </p>
                 </router-link>
                 <v-divider class="mb-3"></v-divider>
-              </div>
+              </div> -->
             </v-card-text>
           </v-card>
         </v-col>
@@ -150,13 +150,18 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      mentors: [],
+    }
+  },
+  mounted() {
+    // this.mentors = this.$store.getters['mentors/someMentors'](this.mentor.id)
+  },
   computed: {
     ...mapGetters({
       mentors: 'mentors/someMentors',
     }),
-    // mentors(id) {
-    //   this.mentors(id)
-    // },
   },
   scrollToTop: true,
   head() {

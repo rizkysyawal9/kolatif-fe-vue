@@ -11,7 +11,12 @@
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn text class="text-none mr-2" color="primary" to="/dashboard/mentors"
+      <v-btn
+        v-if="user.role != 'mentor'"
+        text
+        class="text-none mr-2"
+        color="primary"
+        to="/dashboard/mentors"
         >Mentors</v-btn
       >
       <v-btn
@@ -19,6 +24,7 @@
         color="primary"
         class="text-none mr-2"
         to="/dashboard/sessions"
+        @click="loadMentor"
         >Sessions</v-btn
       >
       <v-btn text color="primary" class="text-none mr-2" to="/dashboard/events"
@@ -42,7 +48,26 @@
 </template>
 
 <script>
-export default {}
+import { mapState } from 'vuex'
+
+export default {
+  computed: {
+    ...mapState('user', {
+      user: state => state.user,
+    }),
+  },
+  mounted() {
+    console.log(this.user)
+  },
+  methods: {
+    async loadMentor() {
+      if (this.user.role == 'mentee')
+        await this.$store.dispatch('sesssion/loadMenteeSessions', this.user.id)
+      else
+        await this.$store.dispatch('sessions/loadMentorSessions', this.user.id)
+    },
+  },
+}
 </script>
 
 <style></style>

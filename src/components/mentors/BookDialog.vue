@@ -102,6 +102,7 @@
             class="white--text"
             :disabled="!valid"
             @click="bookMentor"
+            :loading="isLoading"
           >
             Book
           </v-btn>
@@ -113,6 +114,10 @@
 
 <script>
 import validation from '../../utils/validation'
+import { firebase } from '@firebase/app'
+import { mapState } from 'vuex'
+import '@firebase/auth'
+import '@firebase/firestore'
 export default {
   props: {
     mentor: {
@@ -134,7 +139,16 @@ export default {
         date: '',
         time: null,
       },
+      isLoading: false,
     }
+  },
+  mounted() {
+    console.log(this.mentor)
+  },
+  computed: {
+    ...mapState('user', {
+      user: state => state.user,
+    }),
   },
   methods: {
     closeDialog() {
@@ -144,10 +158,30 @@ export default {
     },
     async bookMentor() {
       // TODO: Get Mentee ID
-      this.book.fromMenteeid = 1
+      this.isLoading = true
+      this.book.fromMenteeid = this.user.id
       this.book.toMentorid = this.mentor.id
+      this.sessionId = `${this.book.fromMenteeid}-${this.book.toMentorid}`
       // eslint-disable-next-line no-console
       console.log(this.book)
+      await firebase
+        .firestore()
+        .collection('sessions')
+        .doc(this.sessionId.toString())
+        .set({
+          sessionId: this.sessionId,
+          fromMenteeId: this.user.id,
+          toMentorId: this.mentor.id,
+          date: this.book.date,
+          time: this.book.time,
+          status: 'Pending',
+          gmeetLink: '',
+          message: '',
+          review: '',
+        })
+      this.isLoading = false
+      await this.$store.dispatch('sessions/loadMenteeSessions', this.user.id)
+      this.$router.push({ name: 'sessions' })
       // TODO: API Call to Backend inputing book Object
       // const book = this.book
       const snackbar = {
@@ -157,10 +191,11 @@ export default {
       // await this.$store.dispatch('mentors/bookMentor', {
       //   book,
       //   snackbar,
+      // // })
+
+      // await this.$store.dispatch('snackbar/setSnackbar', {
+      //   snackbar,
       // })
-      await this.$store.dispatch('snackbar/setSnackbar', {
-        snackbar,
-      })
       this.dialog = false
     },
   },

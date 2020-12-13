@@ -21,6 +21,26 @@
           </div>
           <v-form v-model="valid">
             <v-text-field
+              v-model="registerInfo.email"
+              prepend-inner-icon="mdi-account-outline"
+              label="E-mail"
+              :rules="[required('email'), emailFormat()]"
+              outlined
+              dense
+            />
+            <v-text-field
+              v-model="registerInfo.password"
+              prepend-inner-icon="mdi-lock-outline"
+              label="Password"
+              :type="showPassword ? 'text' : 'password'"
+              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+              counter="true"
+              :rules="[required('password'), minLength('password', 8)]"
+              outlined
+              dense
+              @click:append="showPassword = !showPassword"
+            />
+            <v-text-field
               v-model="registerInfo.name"
               prepend-inner-icon="mdi-account-outline"
               label="Name"
@@ -28,9 +48,8 @@
               outlined
               dense
             />
-
             <v-combobox
-              v-model="registerInfo.experitse"
+              v-model="registerInfo.expertise"
               :items="expertise"
               hide-selected
               hint="You can choose more than one expertise"
@@ -75,6 +94,7 @@
               class="text-none primmary"
               color="primary"
               @click="registerUser"
+              :loading="isLoading"
               >Create a new Account</v-btn
             >
           </v-form>
@@ -87,17 +107,21 @@
 
 <script>
 import validation from '../../utils/validation'
+import { firebase } from '@firebase/app'
+import '@firebase/auth'
+import '@firebase/firestore'
 export default {
   layout: 'normal',
   data() {
     return {
       rePassword: '',
+      uid: '',
       registerInfo: {
         name: '',
         email: '',
         password: '',
         campus: '',
-        experitse: [],
+        expertise: [],
         jobTitle: '',
         company: '',
       },
@@ -115,12 +139,60 @@ export default {
       showPassword: false,
       ...validation,
       valid: false,
+      isLoading: false,
     }
   },
   methods: {
-    registerUser() {
+    async registerUser() {
+      this.isLoading = true
       // eslint-disable-next-line no-console
-      console.log(this.registerInfo)
+      // console.log(this.registerInfo)
+      try {
+        const user = await firebase
+          .auth()
+          .createUserWithEmailAndPassword(
+            this.registerInfo.email,
+            this.registerInfo.password
+          )
+          .then(user => {
+            console.log(user.user.uid)
+            this.uid = user.user.uid.toString()
+          })
+        await firebase
+          .firestore()
+          .collection('profiles')
+          .doc(this.uid)
+          .set({
+            id: this.uid,
+            name: this.registerInfo.name,
+            role: 'mentor',
+            rating: 0,
+            reviews: 0,
+            workExperience: [
+              {
+                jobTitle: this.registerInfo.jobTitle,
+                company: this.registerInfo.company,
+                startDate: '',
+                endDate: '',
+              },
+            ],
+            education: [
+              {
+                campus: this.registerInfo.campus,
+                major: '',
+                startDate: '',
+                endDate: '',
+              },
+            ],
+            expertise: this.registerInfo.expertise,
+            availability: '',
+          })
+        this.$store.dispatch('user/setUser', this.uid)
+        this.isLoading = false
+        this.$router.replace({ name: 'mentors' })
+      } catch (e) {
+        console.log(e.message)
+      }
     },
   },
   head() {

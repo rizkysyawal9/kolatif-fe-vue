@@ -28,14 +28,7 @@
         Choose a topic of your interest
       </h1>
       <v-row>
-        <Topic />
-        <Topic />
-        <Topic />
-        <Topic />
-        <Topic />
-        <Topic />
-        <Topic />
-        <Topic />
+        <Topic :topic="topic" v-for="(topic, index) in topics" :key="index" />
       </v-row>
     </v-container>
   </div>
@@ -51,6 +44,53 @@ export default {
   head() {
     return {
       title: 'FAQ',
+    }
+  },
+  data() {
+    return {
+      topics: [
+        {
+          title: 'My Account',
+          description: 'Find out more about your account',
+          image: 'account',
+          size: '50',
+        },
+        {
+          title: 'Meetings',
+          description: 'Find out more about your meetings',
+          image: 'meeting',
+        },
+        {
+          title: 'Mentoring',
+          description: 'Find out more about mentoring',
+          image: 'presentation',
+        },
+        {
+          title: 'Other',
+          description: 'Find out about other things',
+          image: 'other',
+        },
+        {
+          title: 'Meetings',
+          description: 'Find out more about your meetings',
+          image: 'meeting',
+        },
+        {
+          title: 'My Account',
+          description: 'Find out more about your account',
+          image: 'account',
+        },
+        {
+          title: 'Other',
+          description: 'Find out about other things',
+          image: 'other',
+        },
+        {
+          title: 'Mentoring',
+          description: 'Find out more about mentoring',
+          image: 'presentation',
+        },
+      ],
     }
   },
 }

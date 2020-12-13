@@ -1,51 +1,39 @@
+import { firebase } from '@firebase/app'
+import '@firebase/auth'
+import '@firebase/firestore'
+
 const user = {
-  namespaced: true, 
+  namespaced: true,
   state: {
-    user: {
-      name: 'Joseph Joestar',
-      role: 'mentee',
-      workExperience: [
-        {
-          id: 1,
-          jobTitle: 'Head of Education Division',
-          company: 'Himpunan Mahasiswa Ilmu Komputer',
-          startDate: 'September 2019',
-          endDate: 'Present',
-        },
-      ],
-      education: [
-        {
-          campus: 'IPB University',
-          major: 'Computer Science',
-          startDate: 'September 2015',
-          endDate: 'September 2019',
-        },
-        {
-          campus: 'SMAN 78 Jakarta',
-          major: 'Natural Science',
-          startDate: 'September 2012',
-          endDate: 'September 2015',
-        },
-      ],
-      expertise: [
-        'Frontend Development',
-        'Mobile Development',
-        'UI Design',
-        'Product Design',
-      ],
-      availability:
-        'Monday to Friday above 8.00 P.M. If you want to reschedule please contact me at joseph@kolatif.com',
-    },
+    user: {},
   },
   mutations: {
-
+    SET_USER(state, payload) {
+      state.user = payload
+    },
   },
   actions: {
-
+    async setUser({ commit }, uid) {
+      let data = null
+      await firebase
+        .firestore()
+        .collection('profiles')
+        .doc(uid)
+        .get()
+        .then(profile => {
+          console.log(profile.data())
+          data = profile.data()
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      commit('SET_USER', data)
+      return Promise.resolve()
+    },
   },
   getters: {
-
-  }
+    user: state => state.user,
+  },
 }
 
 // export const state = () => ({

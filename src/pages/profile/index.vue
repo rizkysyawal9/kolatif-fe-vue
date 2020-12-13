@@ -5,13 +5,13 @@
         <v-row justify="center" align="center">
           <v-col cols="12" lg="2">
             <v-img
-              :src="require('../../assets/images/joseph.jpeg')"
+              :src="require('@/assets/images/sandbox.jpg')"
               aspect-ratio="1"
               style="border-radius: 50%; max-width: 150px"
               class="ml-4"
             ></v-img>
           </v-col>
-          <v-col cols="12" lg="8" md="10" class="pl-12">
+          <v-col cols="12" lg="6" md="10" class="pl-12">
             <h2 style="color: primary">
               {{ user.name }}
             </h2>
@@ -23,10 +23,20 @@
             </div>
             <!-- <BookDialog :mentor="mentor" /> -->
           </v-col>
-          <v-col cols="12" lg="2" md="10">
-            <v-btn to="/dashboard/profile/edit" color="primary" class="mr-auto"
-              >Edit Profile</v-btn
-            >
+          <v-col cols="12" lg="4" md="10">
+            <div class="text-center">
+              <v-btn to="/dashboard/profile/edit" color="primary" class="mr-3"
+                >Edit Profile</v-btn
+              >
+              <v-btn
+                color="primary"
+                class="mr-auto"
+                outlined
+                @click="signOut"
+                :loading="isLoading"
+                >Sign Out</v-btn
+              >
+            </div>
             <!-- <BookDialog :mentor="mentor" /> -->
           </v-col>
         </v-row>
@@ -35,6 +45,19 @@
         <v-col cols="12">
           <v-card class="pa-2">
             <v-card-text>
+              <div v-if="user.role == 'mentor'">
+                <h2>Expertise</h2>
+                <v-chip-group class="mt-3">
+                  <div
+                    v-for="(expertise, index) in user.expertise"
+                    :key="index"
+                  >
+                    <v-chip class="mr-2" color="primary ">{{
+                      expertise
+                    }}</v-chip>
+                  </div>
+                </v-chip-group>
+              </div>
               <h2 class="mt-3">My Experience</h2>
               <div
                 v-for="experience in user.workExperience"
@@ -93,18 +116,38 @@
 </template>
 
 <script>
+import { firebase } from '@firebase/app'
+import 'firebase/auth'
 import { mapState } from 'vuex'
 export default {
   layout: 'dashboard',
+  head() {
+    return {
+      title: 'Profile',
+    }
+  },
+  data() {
+    return {
+      isLoading: false,
+      // user: {},
+    }
+  },
   computed: {
     ...mapState('user', {
       user: state => state.user,
     }),
   },
-  head() {
-    return {
-      title: 'Profile',
-    }
+  methods: {
+    async signOut() {
+      try {
+        this.isLoading = true
+        await firebase.auth().signOut()
+        this.isLoading = false
+        this.$router.replace({ name: 'landing' })
+      } catch (e) {
+        console.log(e.message)
+      }
+    },
   },
 }
 </script>

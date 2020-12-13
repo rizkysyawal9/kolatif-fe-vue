@@ -8,10 +8,7 @@
       ></v-progress-linear>
     </template>
 
-    <v-img
-      height="250"
-      :src="require('../../assets/images/joseph.jpeg')"
-    ></v-img>
+    <v-img height="250" :src="require('@/assets/images/sandbox.jpg')"></v-img>
 
     <v-card-title class="pb-2">{{ mentorData.name }}</v-card-title>
 
@@ -49,13 +46,18 @@
         <div v-for="expertise in mentorData.expertise" :key="expertise">
           <v-chip>{{ expertise }}</v-chip>
         </div>
-        <v-chip draggable>teset</v-chip>
       </v-chip-group>
     </v-card-text>
     <v-divider class="mx-4 mb-2"></v-divider>
 
     <v-card-actions class="pt-0">
-      <v-btn color="primary " block text :to="`mentors/${mentorData.id}`">
+      <v-btn
+        color="primary "
+        block
+        text
+        :to="`mentors/${mentorData.id}`"
+        @click.native="scrollToTop"
+      >
         View Mentor Profile
       </v-btn>
     </v-card-actions>
@@ -68,6 +70,11 @@ export default {
     mentorData: {
       type: Object,
       required: true,
+    },
+  },
+  methods: {
+    scrollToTop() {
+      window.scrollTo(0, 0)
     },
   },
 }

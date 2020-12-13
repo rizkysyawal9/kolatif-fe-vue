@@ -24,18 +24,22 @@
               v-model="registerInfo.email"
               prepend-inner-icon="mdi-email-outline"
               label="Email"
-              :rules="[required('email')]"
+              :rules="[required('email'), emailFormat()]"
               outlined
               dense
             />
             <v-text-field
               v-model="registerInfo.password"
               prepend-inner-icon="mdi-lock-outline"
-              label="password"
-              :rules="[required('password')]"
+              label="Password"
+              :type="showPassword ? 'text' : 'password'"
+              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+              counter="true"
+              :rules="[required('password'), minLength('password', 8)]"
               outlined
               dense
-            ></v-text-field>
+              @click:append="showPassword = !showPassword"
+            />
             <v-text-field
               v-model="registerInfo.name"
               prepend-inner-icon="mdi-account-outline"
@@ -47,7 +51,7 @@
 
             <v-text-field
               v-model="registerInfo.campus"
-              prepend-inner-icon="mdi-account-outline"
+              prepend-inner-icon="mdi-school-outline"
               label="Campus Name"
               :rules="[required('campus')]"
               outlined
@@ -56,7 +60,7 @@
 
             <v-text-field
               v-model="registerInfo.major"
-              prepend-inner-icon="mdi-account-outline"
+              prepend-inner-icon="mdi-book-open-outline"
               label="Major"
               :rules="[required('major')]"
               outlined
@@ -68,7 +72,8 @@
               :disabled="!valid"
               class="text-none primmary"
               color="primary"
-              @click="register"
+              @click="registerUser"
+              :loading="isLoading"
               >Create a new Account</v-btn
             >
           </v-form>
@@ -81,10 +86,14 @@
 
 <script>
 import validation from '../../utils/validation'
+import { firebase } from '@firebase/app'
+import '@firebase/auth'
+import '@firebase/firestore'
 export default {
   layout: 'normal',
   data() {
     return {
+      uid: '',
       rePassword: '',
       registerInfo: {
         name: '',
@@ -96,11 +105,61 @@ export default {
       showPassword: false,
       ...validation,
       valid: false,
+      isLoading: false,
     }
   },
   methods: {
-    loginUser() {
-      // TODO LOGIN FUNCTION
+    async registerUser() {
+      this.isLoading = true
+      // eslint-disable-next-line no-console
+      // console.log(this.registerInfo)
+      try {
+        const user = await firebase
+          .auth()
+          .createUserWithEmailAndPassword(
+            this.registerInfo.email,
+            this.registerInfo.password
+          )
+          .then(user => {
+            console.log(user.user.uid)
+            this.uid = user.user.uid.toString()
+          })
+
+        await firebase
+          .firestore()
+          .collection('profiles')
+          .doc(this.uid)
+          .set({
+            id: this.uid,
+            name: this.registerInfo.name,
+            role: 'mentee',
+            rating: null,
+            reviews: null,
+            workExperience: [
+              {
+                jobTitle: '',
+                company: '',
+                startDate: '',
+                endDate: '',
+              },
+            ],
+            education: [
+              {
+                campus: this.registerInfo.campus,
+                major: this.registerInfo.major,
+                startDate: '',
+                endDate: '',
+              },
+            ],
+            expertise: '',
+            availability: '',
+          })
+        this.$store.dispatch('user/setUser', this.uid)
+        this.isLoading = false
+        this.$router.replace({ name: 'mentors' })
+      } catch (e) {
+        console.log(e.message)
+      }
     },
   },
   head() {
